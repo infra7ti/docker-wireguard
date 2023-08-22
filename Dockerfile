@@ -19,7 +19,6 @@ RUN \
     linux-headers && \
   apk add --no-cache \
     bc \
-    coredns \
     gnupg \
     grep \
     iproute2 \
@@ -32,6 +31,8 @@ RUN \
     openresolv \
     perl \
     python3 && \
+  curl -sSL -o - "https://github.com/coredns/coredns/releases/download/v1.11.1/coredns_1.11.1_linux_amd64.tgz" \
+    | tar -C /usr/bin/ -xvzf - && chown root:root /usr/bin/coredns && \
   echo "wireguard" >> /etc/modules && \
   echo "**** install wireguard-tools ****" && \
   if [ -z ${WIREGUARD_RELEASE+x} ]; then \
