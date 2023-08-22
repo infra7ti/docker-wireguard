@@ -17,6 +17,9 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# WG local config directory
+config/
+
 # =========================
 # Operating System Files
 # =========================
