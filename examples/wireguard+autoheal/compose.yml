@@ -1,0 +1,37 @@
+version: '3'
+name: wireguard
+
+services:
+  autoheal:
+    environment:
+      AUTOHEAL_CONTAINER_LABEL: WIREGUARD-AUTOHEAL
+    depends_on:
+      server:
+        condition: service_healthy
+    image: infra7/autoheal:latest
+    init: true
+    restart: unless-stopped
+    volumes:
+      - /run/docker.sock:/run/docker.sock
+
+  server:
+    image: infra7/wireguard:latest
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      LOG_CONFS: true
+      PERSISTENTKEEPALIVE_PEERS: all
+      PGID: 1000
+      PUID: 1000
+      SERVERPORT: ${SERVERPORT:-51820}
+      SERVERURL: auto
+      TZ: ${TZ:-Etc/UTC}
+    labels:
+      WIREGUARD-AUTOHEAL: true
+    restart: unless-stopped
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    volumes:
+      - ${PWD}/config:/config
+      - /lib/modules:/lib/modules

@@ -1,0 +1,26 @@
+name: <change-me>-wireguard
+
+services:
+  autoheal:
+    environment:
+      AUTOHEAL_CONTAINER_LABEL: <change-me>-wireguard-autoheal
+
+  server:
+    environment:
+      PEERS: "<comma-separated-list-of-yours-peers>"
+      PEERDNS: "10.51.82.1,<comma-separated-list-of-your-peer-dns>"
+      INTERNAL_SUBNET: 10.51.82.0
+      ALLOWEDIPS: "10.51.82.0/24,192.168.51.0/24,<comma-separated-list-of-your-allowed-subnets>"
+      SERVERPORT: 51820
+    labels:
+      <change-me>-wireguard-autoheal: true
+    networks:
+      default:
+        ipv4_address: 192.168.51.82
+    ports:
+      - 51820:51820/udp
+
+networks:
+  default:
+    name: <change-me>-wireguard
+    external: true
